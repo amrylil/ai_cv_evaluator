@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { EvaluationService } from "../usecases/evaluations.usecase";
 import { ApiResponse } from "../../../utils/apiResponse";
+import { evaluationQueue } from "../../../queues/queue";
 
 const service = new EvaluationService();
 
@@ -28,8 +29,18 @@ export class EvaluationHandler {
   static async runEvaluation(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const result = await service.runEvaluation(id);
-      return ApiResponse.success(res, result, "Evaluation executed");
+      const { jobDescription } = req.body;
+
+      await evaluationQueue.add("evaluate", {
+        taskId: id,
+        jobDescription,
+      });
+
+      return ApiResponse.success(
+        res,
+        { id, status: "queued" },
+        "Evaluation queued"
+      );
     } catch (err: any) {
       return ApiResponse.error(res, err, 500);
     }
