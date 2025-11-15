@@ -1,0 +1,68 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Document {
+  id               Int     @id @default(autoincrement())
+  extractedText    String  @db.Text
+  originalFilename String? @db.VarChar(255)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  evaluationTasksCv      EvaluationTask[] @relation("CvToDocument")
+  evaluationTasksProject EvaluationTask[] @relation("ProjectToDocument")
+
+  @@map("documents")
+}
+
+model EvaluationTask {
+  id                String           @id @default(uuid())
+  type              TaskType         @default(cv)
+  cvDocumentId      Int?
+  projectDocumentId Int?
+  status            EvaluationStatus @default(queued)
+  result            Json?
+  errorMessage      String?          @db.Text
+  retryCount        Int              @default(0)
+  completedAt       DateTime?        @map("completed_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  cvDocument      Document? @relation("CvToDocument", fields: [cvDocumentId], references: [id])
+  projectDocument Document? @relation("ProjectToDocument", fields: [projectDocumentId], references: [id])
+
+  @@map("evaluation_tasks")
+}
+
+model KnowledgeBase {
+  id        String    @id @default(uuid())
+  content   String
+  embedding Json
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("knowledge_base")
+}
+
+enum EvaluationStatus {
+  queued
+  processing
+  completed
+  failed
+}
+
+enum TaskType {
+  cv
+  project
+  combined
+}

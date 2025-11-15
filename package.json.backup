@@ -1,0 +1,57 @@
+{
+  "name": "digital_hero_be",
+  "module": "index.ts",
+  "prisma": {
+    "seed": "bun src/prisma/seed.ts"
+  },
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/bun": "latest",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.6.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@types/uuid": "^11.0.0",
+    "nodemon": "^3.1.10",
+    "plop": "^4.0.4",
+    "pluralize": "^8.0.0",
+    "prisma": "^6.16.2",
+    "ts-node": "^10.9.2"
+  },
+  "alias": {
+    "onnxruntime-node": "onnxruntime-web"
+  },
+  "scripts": {
+    "dev": "bun --hot src/server.ts",
+    "start": "bun src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "generate": "plop --plopfile scripts/plop.js",
+    "seed": "bun prisma/seed.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.1.0",
+    "@huggingface/transformers": "^3.7.4",
+    "@prisma/client": "^6.16.2",
+    "@types/multer": "^2.0.0",
+    "@types/pdf-parse": "^1.1.5",
+    "axios": "^1.12.2",
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "glob": "^11.0.3",
+    "multer": "^2.0.2",
+    "onnxruntime-web": "^1.23.0",
+    "pdf2json": "^3.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^13.0.0",
+    "winston": "^3.17.0",
+    "zod": "^4.1.11",
+    "zod-openapi": "^5.4.2",
+    "zod-to-openapi": "^0.2.1"
+  }
+}
