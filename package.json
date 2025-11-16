@@ -28,6 +28,7 @@
   "homepage": "https://github.com/amrylil/cv_evaluation_api#readme",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.1.0",
+    "@google/generative-ai": "^0.24.1",
     "@huggingface/transformers": "^3.7.4",
     "@prisma/client": "^6.16.2",
     "axios": "^1.12.2",

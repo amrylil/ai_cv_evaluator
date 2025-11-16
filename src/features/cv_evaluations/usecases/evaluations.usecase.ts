@@ -1,4 +1,3 @@
-import { callOpenRouter } from "../../../utils/deepseek";
 import { extractTextFromPdf } from "../../../utils/textExtractor";
 import { IEvaluationService } from "../contract";
 import { EvaluationStatus } from "@prisma/client";
@@ -14,6 +13,7 @@ import { KnowledgeService } from "./knowledge.usecase";
 import { handlePrompt } from "../../../utils/handlePrompt";
 import { EvaluationRepository } from "../repositories/evaluation.repository";
 import { sanitizeLLM } from "../../../utils/outputSanitize";
+import { callGemini } from "../../../utils/gemini";
 
 export class EvaluationService implements IEvaluationService {
   private repo: EvaluationRepository;
@@ -78,7 +78,7 @@ async runEvaluation(taskId: string, jobDescription?: string) {
   const prompt = handlePrompt(jdText, context, cvText);
 
   try {
-    const rawResponse = await callOpenRouter(prompt);
+    const rawResponse = await callGemini(prompt);
 
     const cleaned = sanitizeLLM(rawResponse);
 
