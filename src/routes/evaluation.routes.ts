@@ -5,7 +5,14 @@ import { EvaluationHandler } from "../features/cv_evaluations/handlers/evaluatio
 const router = Router();
 const upload = multer({ dest: "uploads/" });
 
-router.post("/upload", upload.single("file"), EvaluationHandler.upload);
+router.post(
+  "/upload",
+  upload.fields([
+    { name: "cv", maxCount: 1 },
+    { name: "project", maxCount: 1 },
+  ]),
+  EvaluationHandler.upload
+);
 
 router.post("/:id/evaluate", EvaluationHandler.runEvaluation);
 

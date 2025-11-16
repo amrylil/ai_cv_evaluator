@@ -8,10 +8,24 @@ const service = new EvaluationService();
 export class EvaluationHandler {
   static async upload(req: Request, res: Response) {
     try {
-      const file = (req as any).file;
-      const result = await service.uploadCv(file.path, file.originalname);
-      return ApiResponse.success(res, result, "CV uploaded successfully", 201);
-    } catch (err: any) {
+      const files = req.files as any;
+
+      const cv = files?.cv?.[0];
+      const project = files?.project?.[0];
+
+      if (!cv || !project) {
+        return ApiResponse.error(res, "CV and Project file are required", 400);
+      }
+
+      const result = await service.uploadDocuments(
+        cv.path,
+        cv.originalname,
+        project.path,
+        project.originalname
+      );
+
+      return ApiResponse.success(res, result, "Files uploaded", 201);
+    } catch (err) {
       return ApiResponse.error(res, err, 500);
     }
   }

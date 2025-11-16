@@ -6,7 +6,7 @@ import {
 } from "@prisma/client";
 import {
   EvaluationResponseDto,
-  UploadCvResponseDto,
+  UploadDocumentsResponseDto,
 } from "./dtos/evaluation.dto";
 import {
   CreateKnowledgeRequestDto,
@@ -34,7 +34,7 @@ export interface IKnowledgeRepository {
 
 export interface IEvaluationRepository {
   createDocument(filename: string, extractedText: string): Promise<Document>;
-  createTask(documentId: number): Promise<EvaluationTask>;
+  createTask(cvId: number, projectId: number): Promise<EvaluationTask>;
   updateTask(
     taskId: string,
     status: EvaluationStatus,
@@ -56,7 +56,12 @@ export interface IKnowledgeService {
 }
 
 export interface IEvaluationService {
-  uploadCv(filePath: string, filename: string): Promise<UploadCvResponseDto>;
+  uploadDocuments(
+    cvPath: string,
+    cvName: string,
+    projectPath: string,
+    projectName: string
+  ): Promise<UploadDocumentsResponseDto>;
   getResult(taskId: string): Promise<EvaluationResponseDto>;
   runEvaluation(
     taskId: string,

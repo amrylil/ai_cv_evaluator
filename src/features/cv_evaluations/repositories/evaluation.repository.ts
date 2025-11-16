@@ -14,11 +14,16 @@ export class EvaluationRepository implements IEvaluationRepository {
     });
   }
 
-  async createTask(documentId: number) {
-    return this.prisma.evaluationTask.create({
-      data: { cvDocumentId: documentId, status: EvaluationStatus.queued },
-    });
-  }
+
+  async createTask(cvId: number, projectId: number) {
+  return this.prisma.evaluationTask.create({
+    data: {
+      cvDocumentId: cvId,
+      projectDocumentId: projectId,
+      status: EvaluationStatus.queued,
+    },
+  });
+}
 
   async updateTask(
     taskId: string,

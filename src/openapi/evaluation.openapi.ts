@@ -1,13 +1,13 @@
 import {
   evaluationResponseSchema,
-  uploadCvRequestSchema,
-  uploadCvResponseSchema,
+  uploadDocumentsRequestSchema,
+  uploadDocumentsResponseSchema,
 } from "../features/cv_evaluations/dtos/evaluation.dto";
 import { registry } from "./registry";
 
 // Register schemas
-registry.register("UploadCvRequest", uploadCvRequestSchema);
-registry.register("UploadCvResponse", uploadCvResponseSchema);
+registry.register("UploadDocumentsRequest", uploadDocumentsRequestSchema);
+registry.register("UploadDocumentsResponse", uploadDocumentsResponseSchema);
 registry.register("EvaluationResponse", evaluationResponseSchema);
 
 // POST /evaluations/upload
@@ -15,22 +15,22 @@ registry.registerPath({
   method: "post",
   path: "/evaluations/upload",
   tags: ["Evaluations"],
-  summary: "Upload a CV PDF to create evaluation task",
+  summary: "Upload CV and Project PDF files to create an evaluation task",
   request: {
     body: {
       content: {
         "multipart/form-data": {
-          schema: { $ref: "#/components/schemas/UploadCvRequest" },
+          schema: { $ref: "#/components/schemas/UploadDocumentsRequest" },
         },
       },
     },
   },
   responses: {
     201: {
-      description: "CV uploaded successfully, evaluation task created",
+      description: "Documents uploaded successfully, evaluation task created",
       content: {
         "application/json": {
-          schema: { $ref: "#/components/schemas/UploadCvResponse" },
+          schema: { $ref: "#/components/schemas/UploadDocumentsResponse" },
         },
       },
     },

@@ -23,22 +23,23 @@ model Document {
 }
 
 model EvaluationTask {
-  id                String           @id @default(uuid())
-  type              TaskType         @default(cv)
-  cvDocumentId      Int?
-  projectDocumentId Int?
-  status            EvaluationStatus @default(queued)
-  result            Json?
-  errorMessage      String?          @db.Text
-  retryCount        Int              @default(0)
-  completedAt       DateTime?        @map("completed_at")
+  id     String           @id @default(uuid())
+  status EvaluationStatus @default(queued)
+
+  cvDocumentId      Int
+  projectDocumentId Int
+
+  result       Json?
+  errorMessage String?   @db.Text
+  retryCount   Int       @default(0)
+  completedAt  DateTime? @map("completed_at")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  cvDocument      Document? @relation("CvToDocument", fields: [cvDocumentId], references: [id])
-  projectDocument Document? @relation("ProjectToDocument", fields: [projectDocumentId], references: [id])
+  cvDocument      Document @relation("CvToDocument", fields: [cvDocumentId], references: [id])
+  projectDocument Document @relation("ProjectToDocument", fields: [projectDocumentId], references: [id])
 
   @@map("evaluation_tasks")
 }
