@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { embedText } from "./utils/vectorStore";
+import { embedText } from "../src/utils/vectorStore";
 
 const prisma = new PrismaClient();
 

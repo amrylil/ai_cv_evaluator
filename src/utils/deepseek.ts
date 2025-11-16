@@ -19,7 +19,7 @@ export async function callOpenRouter(prompt: string) {
       "X-Title": "CV Check App",
     },
     body: JSON.stringify({
-      model: "deepseek/deepseek-chat-v3.1:free",
+      model: "tngtech/deepseek-r1t2-chimera:free",
       messages: [
         { role: "system", content: "You are an expert technical recruiter." },
         { role: "user", content: prompt },

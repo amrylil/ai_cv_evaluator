@@ -20,7 +20,8 @@
   },
   "include": [
     "src/**/*",
-    "uploads/seed.ts"
+    "uploads/seed.ts",
+    "prisma/seed.ts"
   ], // Hanya proses file di dalam folder src
   "exclude": [
     "node_modules"

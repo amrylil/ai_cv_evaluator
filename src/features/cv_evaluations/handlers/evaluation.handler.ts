@@ -29,11 +29,9 @@ export class EvaluationHandler {
   static async runEvaluation(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { jobDescription } = req.body;
 
       await evaluationQueue.add("evaluate", {
         taskId: id,
-        jobDescription,
       });
 
       return ApiResponse.success(

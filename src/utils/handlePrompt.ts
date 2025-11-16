@@ -4,18 +4,27 @@ export const handlePrompt = (
   cvText: string
 ): string => {
   return `
-You are evaluating a candidate for a specific job.
+You are an AI evaluator. You MUST return valid JSON only.
 
 Job Description:
 ${jdText}
 
-Retrieved Context (RAG):
+Retrieved Context:
 ${context}
 
 Candidate CV:
 ${cvText}
 
-Return ONLY a valid JSON object with the following fields:
+Your task:
+Return ONLY a valid JSON object. 
+- No explanation
+- No commentary
+- No markdown
+- No backticks
+- No surrounding text
+
+The JSON format MUST be exactly:
+
 {
   "cv_match_rate": number,
   "cv_feedback": string,
@@ -23,6 +32,5 @@ Return ONLY a valid JSON object with the following fields:
   "project_feedback": string,
   "overall_summary": string
 }
-No explanations, no extra text, no markdown.
-  `.trim();
+`.trim();
 };
