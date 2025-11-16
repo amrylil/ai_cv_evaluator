@@ -28,7 +28,10 @@ export const uploadDocumentsResponseSchema = z.object({
   }),
   cvDocumentId: z.number().openapi({ example: 10 }),
   projectDocumentId: z.number().openapi({ example: 11 }),
-  status: z.nativeEnum(EvaluationStatus).openapi({ example: "queued" }),
+  status: z
+    .nativeEnum(EvaluationStatus)
+    .openapi({ example: "queued" })
+    .optional(),
 });
 
 /**

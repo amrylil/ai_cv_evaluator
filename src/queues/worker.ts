@@ -4,9 +4,12 @@ import { EvaluationService } from "../features/cv_evaluations/usecases/evaluatio
 
 const evaluationService = new EvaluationService();
 
+const host = process.env.HOST_REDIS || "127.0.0.1";
+const port = Number(process.env.PORT_REDIS) || 6379;
+
 const connection = new IORedis({
-  host: "127.0.0.1",
-  port: 6379,
+  host,
+  port,
   maxRetriesPerRequest: null,
 });
 
@@ -17,7 +20,7 @@ new Worker(
 
     const taskId = job.data.taskId;
 
-    await evaluationService.runEvaluation(taskId, );
+    await evaluationService.runEvaluation(taskId);
 
     console.log("Job completed:", job.id);
   },

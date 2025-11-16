@@ -40,7 +40,6 @@ export class EvaluationService implements IEvaluationService {
       taskId: task.id,
       cvDocumentId: cvDoc.id,
       projectDocumentId: projectDoc.id,
-      status: task.status,
     };
   }
 
