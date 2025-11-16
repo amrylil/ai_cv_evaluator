@@ -23,7 +23,7 @@ export class KnowledgeService implements IKnowledgeService {
     return {
       id: created.id,
       content: created.content,
-      embedding: created.embedding as number[],
+      embedding: embedding,
       createdAt: created.createdAt.toISOString(),
     };
   }

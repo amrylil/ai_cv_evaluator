@@ -92,3 +92,23 @@ registry.registerPath({
     404: { description: "Task not found" },
   },
 });
+
+registry.registerPath({
+  method: "get",
+  path: "/evaluations/all",
+  tags: ["Evaluations"],
+  summary: "Get all evaluation tasks",
+  responses: {
+    200: {
+      description: "List of all evaluations",
+      content: {
+        "application/json": {
+          schema: {
+            type: "array",
+            items: { $ref: "#/components/schemas/EvaluationResponse" },
+          },
+        },
+      },
+    },
+  },
+});

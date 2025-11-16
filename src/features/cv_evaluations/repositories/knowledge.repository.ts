@@ -10,9 +10,19 @@ export class KnowledgeRepository implements IKnowledgeRepository {
   }
 
   async store(content: string, embedding: number[]): Promise<KnowledgeBase> {
-    return this.prisma.knowledgeBase.create({
-      data: { content, embedding },
-    });
+    const embeddingVector = `[${embedding.join(",")}]`;
+
+    const result = await this.prisma.$queryRawUnsafe<KnowledgeBase[]>(
+      `
+    INSERT INTO knowledge_base (content, embedding)
+    VALUES ($1, $2::vector)
+    RETURNING *
+  `,
+      content,
+      embeddingVector
+    );
+
+    return result[0];
   }
 
   async getAll(): Promise<KnowledgeBase[]> {
@@ -22,15 +32,16 @@ export class KnowledgeRepository implements IKnowledgeRepository {
   }
 
   async searchRelevantChunks(queryEmbedding: number[], topK: number = 5) {
-    const all = await this.prisma.knowledgeBase.findMany();
+    const embeddingVector = `[${queryEmbedding.join(",")}]`;
 
-    return all
-      .map((item) => ({
-        content: item.content,
-        score: cosineSimilarity(queryEmbedding, item.embedding as number[]),
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, topK);
+    const result = await this.prisma.$queryRaw<
+      { content: string; score: number }[]
+    >`SELECT content, embedding <#> ${embeddingVector}::vector AS score
+  FROM knowledge_base
+  ORDER BY embedding <#> ${embeddingVector}::vector
+  LIMIT ${topK}`;
+
+    return result;
   }
 
   async findById(id: string): Promise<KnowledgeBase | null> {

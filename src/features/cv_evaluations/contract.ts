@@ -41,6 +41,8 @@ export interface IEvaluationRepository {
     result?: any,
     errorMessage?: string
   ): Promise<EvaluationTask>;
+  getAll(): Promise<EvaluationTask[]>;
+
   findTaskById(
     taskId: string
   ): Promise<(EvaluationTask & { cvDocument: Document | null }) | null>;
@@ -62,6 +64,7 @@ export interface IEvaluationService {
     projectPath: string,
     projectName: string
   ): Promise<UploadDocumentsResponseDto>;
+  getAll(): Promise<EvaluationResponseDto[]>;
   getResult(taskId: string): Promise<EvaluationResponseDto>;
   runEvaluation(
     taskId: string,

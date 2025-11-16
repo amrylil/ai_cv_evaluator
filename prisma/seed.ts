@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { embedText } from "../src/utils/vectorStore";
+import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -44,18 +45,21 @@ async function main() {
     );
 
     const embeddingVector = await embedText(item.content);
+    const vectorString = `[${embeddingVector.join(",")}]`;
 
-    await prisma.knowledgeBase.create({
-      data: {
-        content: item.content,
-        embedding: embeddingVector,
-      },
-    });
+    await prisma.$queryRawUnsafe(
+      `
+      INSERT INTO knowledge_base (id, content, embedding, updated_at)
+      VALUES ($1, $2, $3::vector, CURRENT_TIMESTAMP)
+    `,
+      randomUUID(),
+      item.content,
+      vectorString
+    );
   }
 
   console.log("✅ Seeding selesai.");
 }
-
 main()
   .catch((e) => {
     console.error("❌ Gagal menjalankan seeder:", e);

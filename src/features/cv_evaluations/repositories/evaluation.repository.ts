@@ -14,16 +14,15 @@ export class EvaluationRepository implements IEvaluationRepository {
     });
   }
 
-
   async createTask(cvId: number, projectId: number) {
-  return this.prisma.evaluationTask.create({
-    data: {
-      cvDocumentId: cvId,
-      projectDocumentId: projectId,
-      status: EvaluationStatus.queued,
-    },
-  });
-}
+    return this.prisma.evaluationTask.create({
+      data: {
+        cvDocumentId: cvId,
+        projectDocumentId: projectId,
+        status: EvaluationStatus.queued,
+      },
+    });
+  }
 
   async updateTask(
     taskId: string,
@@ -42,10 +41,19 @@ export class EvaluationRepository implements IEvaluationRepository {
     });
   }
 
+  async getAll() {
+    return this.prisma.evaluationTask.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        cvDocument: true,
+        projectDocument: true,
+      },
+    });
+  }
   async findTaskById(taskId: string) {
     return this.prisma.evaluationTask.findUnique({
       where: { id: taskId },
-      include: { cvDocument: true },
+      include: { cvDocument: true, projectDocument: true },
     });
   }
 }

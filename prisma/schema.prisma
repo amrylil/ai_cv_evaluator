@@ -45,12 +45,12 @@ model EvaluationTask {
 }
 
 model KnowledgeBase {
-  id        String    @id @default(uuid())
+  id        String                 @id @default(uuid())
   content   String
-  embedding Json
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  embedding Unsupported("vector")?
+  createdAt DateTime               @default(now()) @map("created_at")
+  updatedAt DateTime               @updatedAt @map("updated_at")
+  deletedAt DateTime?              @map("deleted_at")
 
   @@map("knowledge_base")
 }

@@ -57,4 +57,13 @@ export class EvaluationHandler {
       return ApiResponse.error(res, err, 500);
     }
   }
+
+  static async getAll(req: Request, res: Response) {
+    try {
+      const result = await service.getAll();
+      return ApiResponse.success(res, result, "All evaluations retrieved");
+    } catch (err: any) {
+      return ApiResponse.error(res, err, 500);
+    }
+  }
 }

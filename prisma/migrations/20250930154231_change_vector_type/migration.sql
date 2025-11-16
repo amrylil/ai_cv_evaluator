@@ -34,11 +34,12 @@ CREATE TABLE "public"."evaluation_tasks" (
     CONSTRAINT "evaluation_tasks_pkey" PRIMARY KEY ("id")
 );
 
+CREATE EXTENSION IF NOT EXISTS vector;
 -- CreateTable
 CREATE TABLE "public"."knowledge_base" (
     "id" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "embedding" JSONB NOT NULL,
+     "embedding" VECTOR(384) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),

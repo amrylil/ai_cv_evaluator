@@ -15,6 +15,7 @@ router.post(
 );
 
 router.post("/:id/evaluate", EvaluationHandler.runEvaluation);
+router.get("/all", EvaluationHandler.getAll);
 
 router.get("/result/:id", EvaluationHandler.getResult);
 

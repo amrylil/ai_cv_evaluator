@@ -44,6 +44,19 @@ export class EvaluationService implements IEvaluationService {
     };
   }
 
+  async getAll() {
+    const tasks = await this.repo.getAll();
+
+    return tasks.map((task) =>
+      evaluationResponseSchema.parse({
+        id: task.id,
+        status: task.status,
+        result: task.result ?? undefined,
+        errorMessage: task.errorMessage ?? null,
+      })
+    );
+  }
+
   async getResult(taskId: string): Promise<EvaluationResponseDto> {
     const task = await this.repo.findTaskById(taskId);
     if (!task) throw new Error("Task not found");
@@ -76,18 +89,19 @@ export class EvaluationService implements IEvaluationService {
     await this.repo.updateTask(taskId, EvaluationStatus.processing);
 
     const cvText = task.cvDocument?.extractedText ?? "";
+    const projectText = task.projectDocument?.extractedText ?? "";
+
     const jdText = jobDescription ?? "";
 
     const relevantChunks = await this.knowledgeService.search(jdText, 5);
     const context = relevantChunks.map((c) => c.content).join("\n---\n");
 
-    const prompt = handlePrompt(jdText, context, cvText);
+    const prompt = handlePrompt(jdText, context, cvText, projectText);
 
     try {
       const rawResponse = await callGemini(prompt);
 
       const cleaned = sanitizeLLM(rawResponse);
-
       const parsedJson = JSON.parse(cleaned);
 
       const parsed = evaluationResultSchema.parse(parsedJson);
